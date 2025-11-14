@@ -1,7 +1,8 @@
 import asyncio
 
-from server import start_server
+from server import Server
 
 
 if __name__ == "__main__":
-    asyncio.run(start_server("localhost", 9000))
+    server = Server("localhost", 9000)
+    asyncio.run(server.start())
