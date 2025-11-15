@@ -1,19 +1,18 @@
 import asyncio
 
-
-async def _new_connection(reader, writer):
-    # new connection
-    ...
+from src.connection_manager import ConnectionManager
 
 
 class Server:
-    def __init__(self, host: str, port: int):
+    def __init__(self, host: str, port: int, connection_function):
         self.host = host
         self.port = port
+
         self.obj = None
+        self.connections = ConnectionManager(connection_function)
 
     async def start(self):
-        self.obj = await asyncio.start_server(_new_connection, self.host, self.port)
+        self.obj = await asyncio.start_server(self.connections.new, self.host, self.port)
 
         async with self.obj:
             await self.obj.serve_forever()
