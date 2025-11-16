@@ -3,24 +3,25 @@ import asyncio
 from src.logs import logs_pipe
 from src.server import Server
 
-from _client import try_connect
 from _pipe import Pipe
 
 
 async def test(host="localhost", port=9000):
-    logs_pipe(Pipe())
+    test_pipe = Pipe()
+    logs_pipe(test_pipe)
 
     server = Server(host, port)
     server_task = asyncio.create_task(server.start())  # start server in task
 
-    # test client
-    assert await try_connect(host, port), "server not found!"
+    await asyncio.sleep(0.1)  # waiting for the log to be registered
 
+    assert test_pipe[-1] == "server is up!", test_pipe[-1]  # [-1] = last item
+
+    # close the server
     await server.close()
-    assert not await try_connect(host, port), "server not stop!"
-
-    # close the server task
     server_task.cancel()
+
+    assert test_pipe[-1] == "server is closed!", test_pipe[-1]
 
 
 if __name__ == "__main__":
