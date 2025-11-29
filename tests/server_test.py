@@ -1,7 +1,8 @@
 import asyncio
 
 from src.server import Server
-from client import try_connect
+
+from _client import try_connect
 
 
 async def test(host="localhost", port=9000):
