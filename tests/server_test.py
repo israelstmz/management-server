@@ -1,15 +1,11 @@
 import asyncio
 
-from src.logs import logs_pipe
 from src.server import Server
 
 from _client import try_connect
-from _pipe import Pipe
 
 
 async def test(host="localhost", port=9000):
-    logs_pipe(Pipe())
-
     server = Server(host, port)
     server_task = asyncio.create_task(server.start())  # start server in task
 
